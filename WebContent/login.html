@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+<meta charset="UTF-8">
+<title>登录</title>
+<script type="text/javascript"  src="static/lib/js/jquery/jquery-2.1.4.min.js" ></script>
+<script type="text/javascript">
+$(function(){
+	var hostURL="http://localhost:8080/dandelion-table";
+	var loginURL="/j_spring_security_check";
+	$('#loginbtn').click(function(){
+		$('#loginForm').attr('action',hostURL+loginURL);
+		$('#loginForm').submit();
+	});
+});
+</script>
+</head>
+<body>
+	<form id="loginForm" method="post" >
+	用户名：<input type="text" name="j_username" id="j_username"  />
+	密码：<input type="password" name="j_password" id="j_username" />
+	<input type="button" name="loginbtn" id="loginbtn" value="登录" />
+	</form>
+</body>
+</html>

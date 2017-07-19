@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+	<!-- postgresql 驱动路径 -->
+	<classPathEntry location="F:\\source_code\\jar_file\\mysql\\mysql-connector-java-5.1.7-bin.jar"/>
+	
+	<context id="mysqlTables" targetRuntime="MyBatis3" defaultModelType="flat" >
+		<commentGenerator>
+			<!-- true表示不生成注释  -->
+  			<property name="suppressAllComments" value="true" />
+  			<!-- 注释中不包含日期  -->
+  			<property name="suppressDate" value="true" />
+		</commentGenerator>
+		<!-- 连接数据库 connectionURL连接数据库的URL driverClass驱动类 userId 数据库用户名 password 
+			数据库密码 -->
+		<jdbcConnection connectionURL="jdbc:mysql://localhost:3306/dandelion_table"
+			driverClass="com.mysql.jdbc.Driver" password="root" userId="root" />
+			
+		<javaTypeResolver type="org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl">
+	        <!-- 
+	            true：使用BigDecimal对应DECIMAL和 NUMERIC数据类型
+	            false：默认,
+	                scale>0;length>18：使用BigDecimal;
+	                scale=0;length[10,18]：使用Long；
+	                scale=0;length[5,9]：使用Integer；
+	                scale=0;length<5：使用Short；
+	         -->
+	        <property name="forceBigDecimals" value="false"/>
+    	</javaTypeResolver>
+			
+		<!-- 生成模型类  targetPackage 模型类所在的包 targetProject 模型类所在的项目路径 -->
+		<javaModelGenerator targetPackage="com.dandelion.web.model"
+			targetProject="D:\Users\aaron\Documents\workspace-sts-3.8.3.RELEASE\dandelion-table\src\main\java"  >
+			<property name="trimStrings" value="true"/>
+		</javaModelGenerator>
+		
+			
+		<!--生成mapper XML文件   targetPackage表示 mapper xml文件所在包名 targetProject表示mapper文件所在的项目路径 -->
+		<sqlMapGenerator targetPackage="com.dandelion.web.mapper"
+			targetProject="D:\Users\aaron\Documents\workspace-sts-3.8.3.RELEASE\dandelion-table\src\main\resources" />
+			
+		<!-- 生成DAO接口和类    targetPackage表示生成Mapper类的包名 targetProject表示生成的Mapper类所在的项目路径 
+			type表示类型 -->
+		<javaClientGenerator targetPackage="com.dandelion.web.mapper"
+			targetProject="D:\Users\aaron\Documents\workspace-sts-3.8.3.RELEASE\dandelion-table\src\main\java"
+			type="XMLMAPPER" > 
+				
+		</javaClientGenerator>
+	    
+	    <!-- 系统 POI图标 -->
+	    <!-- <table schema="public" tableName="tb_poi_sys" domainObjectName="SystemPoi" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 用户POI -->
+	    <!-- <table schema="public" tableName="tb_poi_user" domainObjectName="UserPoi" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 系统图标分组 -->
+	    <!-- <table schema="public" tableName="tb_poi_sys_group" domainObjectName="SystemPoiGroup" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!--用户地图Logo图标  -->
+	    <!-- <table schema="public" tableName="tb_logo_user" domainObjectName="UserLogo" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    	<columnOverride column="id" javaType="java.lang.Long" jdbcType="BIGINT"  />
+	    </table> -->
+	    
+	    <!-- 用户POI关联表 -->
+	    <!-- <table schema="public" tableName="tb_poi_user_association" domainObjectName="PoiUserAssociation" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 编辑器设置表  -->
+	    <!-- <table schema="public" tableName="tb_editor_settings" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!-- 地图修改记录表 -->
+	    <!-- <table schema="public" tableName="tb_map_modify_record" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!-- 地图增量修改记录表 -->
+	    <!-- <table schema="public" tableName="tb_map_modify_record_inc" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!-- 地图主题表 -->
+	    <!-- <table schema="public" tableName="tb_map_theme" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!--地图主题缓存表  -->
+	   <!--  <table schema="public" tableName="tb_theme_cache" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!-- 主题 元素样式表 -->
+	    <!-- <table schema="public" tableName="tb_theme_elemstyle" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!-- 主题 标签样式表 -->
+	    <!-- <table schema="public" tableName="tb_theme_labelstyle" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    <!--用户主题  -->
+	    <!-- <table schema="public" tableName="tb_theme_user" domainObjectName="EditorSettings" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!--  -->
+	    <!-- <table schema="public" tableName="tb_plaza_bunk_contract" domainObjectName="PlazaBunkContract" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 品牌规划 -->
+	    <!-- <table schema="public" tableName="tb_brand_planning" domainObjectName="BrandPlanning" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 课程表 -->
+	    <!-- <table schema="public" tableName="tb_course" domainObjectName="Course" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table> -->
+	    
+	    <!-- 学生表 -->
+	    <table schema="public" tableName="tb_student" domainObjectName="Student" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table>
+	    
+	    <!-- 老师表 -->
+	    <table schema="public" tableName="tb_teacher" domainObjectName="Teacher" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table>
+	    <!-- 老师课程表 -->
+	    <table schema="public" tableName="tb_teacher_course" domainObjectName="TeacherCourse" enableCountByExample="false" 
+	    	enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" 
+	    	selectByExampleQueryId="false" >
+	    	<generatedKey column="id" sqlStatement="MySql" identity="true" />
+	    </table>
+	</context>
+</generatorConfiguration>

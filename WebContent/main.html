@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta charset="UTF-8">
+<title>欢迎登录系统</title>
+<script type="text/javascript"  src="static/lib/js/jquery/jquery-2.1.4.min.js" ></script>
+<script type="text/javascript">
+$(function(){
+	$('#savebtn').click(function(){
+		/* var username=$('#username').val();
+		var password=$('#password').val();
+		var param={};
+		param.userName=username;
+		param.password=password;
+		param.accountStatus='1'; */
+		var param={};
+		param.cname="数学";
+		param.price=89;
+		param.courseNumber=1;
+		param.duration=45;
+		param.startTime=new Date('2017-07-21 14:00');
+		param.studentName="test";
+		param.studentMobilePhone="13693669002";
+		param.teacherName="赵雪";
+		param.teacherMobilePhone="18911307322";
+		param.payStatus="1";
+		param.repeatTime="1";
+		param.remindTime="1";
+		param.courseStatus="1";
+		$.ajax({
+			url:'course',
+			type:'post',
+			data:JSON.stringify(param),
+			dataType: 'json',
+            contentType: 'application/json',
+			success:function(data){
+				console.log(data.success);
+			},
+			error:function(data){
+				
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<div>
+	<input type="text" name="username" id="username" />
+	<input type="password" name="password" id="password" />
+	<input type="button"  name="savebtn" id="savebtn" value="保存" />
+</div>
+<div>
+	hello：<span sec:authentication="principal.authorities" ></span>
+	Logged user: <span sec:authentication="name">Bob</span>
+Roles: <span sec:authentication="principal.username"></span>
+
+<p>
+	Hello <span th:text="${recipient}">Peter</span>!!!
+</p>
+</div>
+</body>
+</html>

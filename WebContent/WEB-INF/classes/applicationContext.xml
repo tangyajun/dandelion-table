@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:cache="http://www.springframework.org/schema/cache" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+	http://www.springframework.org/schema/tx 
+	http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+ 	http://www.springframework.org/schema/cache
+ 	http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+ 	http://www.springframework.org/schema/task 
+   	http://www.springframework.org/schema/task/spring-task-4.2.xsd">
+   	
+	<task:annotation-driven/>
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- 加载jdbc属性配置文件 -->
+	<!-- <context:property-placeholder file-encoding="utf-8" location="classpath*:/jdbc_dev.properties"  /> -->
+	<!-- <bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="location"
+			value="classpath:/jdbc_develop.properties" />
+	</bean> -->
+	<import resource="profile.xml"/>
+	<!-- 数据库连接池配置 -->
+	<bean id="datasource" name="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"  destroy-method="close" >
+		<!-- Connection Info -->
+		<property name="driverClass" value="${jdbc.mysql.driver}" />
+		<property name="jdbcUrl" value="${jdbc.mysql.url}" />
+		<property name="user" value="${jdbc.mysql.username}" />
+		<property name="password" value="${jdbc.mysql.password}" />
+		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+		<property name="minPoolSize" value="${c3p0.minPoolSize}" />
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+		<property name="maxIdleTime" value="${c3p0.maxIdleTime}" />
+		<property name="idleConnectionTestPeriod" value="${c3p0.idleConnectionTestPeriod}" />
+		<property name="maxStatements" value="${c3p0.maxStatements}" />
+		<property name="numHelperThreads" value="${c3p0.numHelperThreads}" />
+	</bean>
+	
+	<!-- spring mybatis整合 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/dandelion/web/mapper/*.xml" />
+		<property name="configLocation" value="classpath:mybatis-configuration.xml" />
+		<!-- 配置分页插件 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=mysql
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+	
+	<!-- 配置扫描器 -->
+	<!-- DAO接口所在包名，Spring会自动查找其下的mapper类 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.dandelion.web.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" >
+		<property name="dataSource"  ref="dataSource" />
+	</bean>
+	
+	<!-- 配置事务的策略 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager" >
+		<tx:attributes>
+			<!-- 定义查询方法都是只读的 -->
+			<tx:method name="query*" propagation="SUPPORTS" />
+			<tx:method name="find*" propagation="SUPPORTS" />
+			<tx:method name="get*" propagation="SUPPORTS" />
+			
+			<!-- 主库执行增、删、改操作 -->
+			<tx:method name="insert*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="modify*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<tx:method name="restore*" propagation="REQUIRED" rollback-for="java.lang.Exception" />
+			<!-- 其它方法使用默认的事务策略
+			<tx:method name="*"/> -->
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+	    <!-- 定义切面，所有Service中所有的方法 -->
+		<aop:pointcut id="txPointcut" expression="execution(public * com.dandelion.web.service.impl.*.*(..))" />
+		<!-- 应用事务策略到Service切面 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	
+	<!-- 事务配置在service层，自动扫描service层的代码不能加在在Spring的context中，要加载扫J2EE的 context中,J2EE高于spring的作用域 -->
+	<!-- <context:component-scan base-package="com.fengmap.editor.web.mvc.services.**" /> -->
+	
+	<!-- 配置spring 包扫描controller类,因为Web容器和MVC容器加载的顺序不一样，扫描所有的注解类会导致出现事务不起作用的问题-->
+	<context:component-scan base-package="com.dandelion.web" >
+    	<!--将Controller的注解排除掉 -->   
+    	<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+	
+	<!-- <bean  class="com.fengmap.security.core.TestFengmapUserDetailService" /> -->
+</beans>

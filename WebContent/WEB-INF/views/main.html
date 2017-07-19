@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" >
+<head>
+<meta charset="UTF-8">
+<title>欢迎登录万达商管铺位可视化系统</title>
+<script type="text/javascript"  src="static/lib/js/jquery/jquery-2.1.4.min.js" ></script>
+<script type="text/javascript">
+$(function(){
+	$('#savebtn').click(function(){
+		var username=$('#username').val();
+		var password=$('#password').val();
+		var param={};
+		param.userName=username;
+		param.password=password;
+		param.accountStatus='1';
+		$.ajax({
+			url:'user',
+			type:'post',
+			data:JSON.stringify(param),
+			dataType: 'json',
+            contentType: 'application/json',
+			success:function(data){
+				
+			},
+			error:function(data){
+				
+			}
+		});
+	});
+});
+
+$(function(){
+	$('#getBtn').click(function(){
+		var username=$('#username').val();
+		var password=$('#password').val();
+		var param={};
+		param.userName=username;
+		param.password=password;
+		param.accountStatus='1';
+		$.ajax({
+			url:'user/loginUserResource',
+			type:'get',
+			data:JSON.stringify(param),
+			dataType: 'json',
+            contentType: 'application/json',
+			success:function(data){
+				alert("1111111111111111111111")
+			},
+			error:function(data){
+				
+			}
+		});
+	});
+});
+
+$(function(){
+	$('#getBtn1').click(function(){
+		var username=$('#username').val();
+		var password=$('#password').val();
+		var param={};
+		param.userName=username;
+		param.password=password;
+		param.accountStatus='1';
+		$.ajax({
+			url:'role',
+			type:'get',
+			data:JSON.stringify(param),
+			dataType: 'json',
+            contentType: 'application/json',
+			success:function(data){
+				var len = data.length;
+				
+			},
+			error:function(data){
+				
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+<div>
+	<input type="text" name="username" id="username" />
+	<input type="password" name="password" id="password" />
+	<input type="button"  name="savebtn" id="savebtn" value="保存" />
+</div>
+<div>
+	Logged user: <span sec:authentication="name"></span>
+	Roles: <span sec:authentication="principal.authorities"></span>
+
+<p>
+	Hello <span th:text="${recipient}">Peter</span>!!!
+</p>
+<span sec:authorize="hasRole('ROLE_ADMIN')" >
+	admin user access
+</span>
+<span sec:authorize="isAuthenticated()" >
+	isAuthenticated()
+</span>
+<span  sec:authorize-url="/test11" >
+	<br><a th:href="@{/test11}" >Admin</a>
+	
+</span>
+
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+  This content is only shown to users.
+</div>
+
+<div>
+	<h3>====================================================================</h3>
+	<input type="button"  name="getBtn" id="getBtn" value="获取用户权限" />
+</div>
+
+<div>
+	<h3>====================测试给用户授权角色======================</h3>
+	<input type="button"  name="getBtn1" id="getBtn1" value="获取所有角色" />
+	<!-- 用户列表 -->
+	<table border="1">
+		<thead>
+			<tr>
+				<th>role_code</th>
+				<th>role_name</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+</div>
+</body>
+</html>
